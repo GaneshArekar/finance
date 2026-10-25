@@ -20,7 +20,7 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-let cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
+const cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;
@@ -57,12 +57,6 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
   return cached.conn;
 }
 
-/**
- * MongoDB client instance for Better-Auth adapter
- */
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
 const mongoClientOpts = {
   serverSelectionTimeoutMS: 8000,
   connectTimeoutMS: 10000,
@@ -71,9 +65,9 @@ const mongoClientOpts = {
 };
 
 if (!global._mongoClientPromise) {
-  client = new MongoClient(MONGODB_URI, mongoClientOpts);
+  const client = new MongoClient(MONGODB_URI, mongoClientOpts);
   global._mongoClientPromise = client.connect();
 }
-clientPromise = global._mongoClientPromise;
+const clientPromise: Promise<MongoClient> = global._mongoClientPromise;
 
 export { clientPromise, MONGODB_DB };

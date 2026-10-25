@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
-import { ArrowRight, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface MagneticSpotlightMarqueeProps {
@@ -73,18 +73,14 @@ export function MagneticSpotlightMarquee({
   const contentWrapperRef = useRef<HTMLDivElement>(null);
 
   // Duplicate image track for continuous infinite scroll
-  const [clonedImages, setClonedImages] = useState<string[]>([]);
-
-  useEffect(() => {
-    setClonedImages([...images, ...images, ...images, ...images]);
-  }, [images]);
+  const clonedImages = useMemo(() => [...images, ...images, ...images, ...images], [images]);
 
   // Infinite horizontal marquee scroll
   useEffect(() => {
     if (!marqueeTrackRef.current || clonedImages.length === 0) return;
 
     const marqueeTrack = marqueeTrackRef.current;
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       const firstChild = marqueeTrack.firstElementChild as HTMLElement;
       if (!firstChild) return;
 
