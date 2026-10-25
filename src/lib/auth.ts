@@ -25,10 +25,17 @@ if (!global._authMongoClient) {
 const authClient = global._authMongoClient;
 const db = authClient.db(MONGODB_DB);
 
+const formatUrl = (url?: string) => {
+  if (!url) return undefined;
+  return url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`;
+};
+
 const getBaseURL = () => {
-  if (process.env.BETTER_AUTH_URL) return process.env.BETTER_AUTH_URL;
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.BETTER_AUTH_URL) return formatUrl(process.env.BETTER_AUTH_URL)!;
+  if (process.env.NEXT_PUBLIC_APP_URL) return formatUrl(process.env.NEXT_PUBLIC_APP_URL)!;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return formatUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL)!;
+  if (process.env.VERCEL_URL) return formatUrl(process.env.VERCEL_URL)!;
+  if (process.env.NODE_ENV === "production") return "https://finance-eosin-phi.vercel.app";
   return "http://localhost:3000";
 };
 
@@ -36,6 +43,33 @@ export const auth = betterAuth({
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET || "personal_finance_default_secret_key_32chars_long",
   baseURL: getBaseURL(),
+  trustedOrigins: async (request) => {
+    const origins: (string | undefined | null)[] = [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://*.vercel.app",
+      "https://*.vercel.sh",
+      "https://finance-eosin-phi.vercel.app",
+      formatUrl(process.env.BETTER_AUTH_URL),
+      formatUrl(process.env.NEXT_PUBLIC_APP_URL),
+      formatUrl(process.env.VERCEL_URL),
+      formatUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL),
+    ];
+
+    if (request) {
+      const origin = request.headers.get("origin");
+      if (origin) {
+        origins.push(origin);
+      }
+      const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+      const proto = request.headers.get("x-forwarded-proto") || "https";
+      if (host) {
+        origins.push(`${proto}://${host}`);
+      }
+    }
+
+    return origins.filter(Boolean) as string[];
+  },
   emailAndPassword: {
     enabled: true,
   },
