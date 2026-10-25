@@ -1,26 +1,165 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-pure-black: #000000;
+  --color-espresso: #1F150C;
+  --color-bronze: #412D15;
+  --color-champagne: #E1DCC9;
+  --color-twilight: #37353E;
+  --color-steel: #44444E;
+  --color-mauve: #715A5A;
+  --color-mint: #D3DAD9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-pure: #000000;
+    --surface-espresso: #1F150C;
+    --border-bronze: #412D15;
+    --text-champagne: #E1DCC9;
+    --twilight-slate: #37353E;
+    --steel-slate: #44444E;
+    --mauve-plum: #715A5A;
+    --platinum-mint: #D3DAD9;
+  }
+
+  .dark {
+    --bg-pure: #000000;
+    --surface-espresso: #1F150C;
+    --border-bronze: #412D15;
+    --text-champagne: #E1DCC9;
+    --twilight-slate: #37353E;
+    --steel-slate: #44444E;
+    --mauve-plum: #715A5A;
+    --platinum-mint: #D3DAD9;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000;
+  color: #E1DCC9;
+  min-height: 100vh;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Layered multi-tone luxury surfaces */
+.luxe-card {
+  background: linear-gradient(145deg, #1F150C 0%, #15100B 100%);
+  border: 1px solid #412D15;
+  color: #E1DCC9;
+  border-radius: 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxe-card:hover {
+  border-color: rgba(225, 220, 201, 0.35);
+  box-shadow: 0 14px 35px -10px rgba(65, 45, 21, 0.5), 0 0 20px rgba(113, 90, 90, 0.15);
+}
+
+.luxe-card-slate {
+  background: linear-gradient(145deg, #37353E 0%, #292830 100%);
+  border: 1px solid #44444E;
+  color: #D3DAD9;
+  border-radius: 1.5rem;
+}
+
+.luxe-card-plum {
+  background: linear-gradient(145deg, rgba(113, 90, 90, 0.25) 0%, rgba(31, 21, 12, 0.9) 100%);
+  border: 1px solid rgba(113, 90, 90, 0.5);
+  color: #E1DCC9;
+  border-radius: 1.5rem;
+}
+
+/* Button variants */
+.luxe-button-primary {
+  background: #E1DCC9;
+  color: #1F150C;
+  font-weight: 700;
+  border-radius: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.luxe-button-primary:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(225, 220, 201, 0.3);
+}
+
+.luxe-button-mauve {
+  background: #715A5A;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.luxe-button-mauve:hover {
+  background: #866b6b;
+  box-shadow: 0 4px 18px rgba(113, 90, 90, 0.4);
+}
+
+.luxe-button-slate {
+  background: #37353E;
+  border: 1px solid #44444E;
+  color: #D3DAD9;
+  border-radius: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.luxe-button-slate:hover {
+  background: #44444E;
+  border-color: #D3DAD9;
+}
+
+/* Glass Dock navigation with dual-palette blur */
+.glass-dock {
+  background: rgba(31, 21, 12, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #412D15;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(113, 90, 90, 0.2);
+}
+
+/* Custom dual-tone scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #412D15;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #715A5A;
+}
+
+/* Badge accents to keep UI vibrant & modern */
+.badge-mauve {
+  background: rgba(113, 90, 90, 0.22);
+  border: 1px solid rgba(113, 90, 90, 0.45);
+  color: #D3DAD9;
+}
+
+.badge-twilight {
+  background: rgba(55, 53, 62, 0.85);
+  border: 1px solid rgba(68, 68, 78, 0.7);
+  color: #D3DAD9;
+}
+
+.badge-mint {
+  background: rgba(211, 218, 217, 0.12);
+  border: 1px solid rgba(211, 218, 217, 0.3);
+  color: #D3DAD9;
+}
+
+.badge-bronze {
+  background: rgba(65, 45, 21, 0.4);
+  border: 1px solid rgba(225, 220, 201, 0.25);
+  color: #E1DCC9;
+}
+
